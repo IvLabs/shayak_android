@@ -1,6 +1,7 @@
 package com.ivlabs.shayak.contract
 
 import android.net.Uri
+import com.ivlabs.shayak.robot.RobotState
 
 /**
  * Contract interface for Model View Presenter
@@ -136,7 +137,7 @@ interface ContractInterface{
          * [speed] desired speed in meters per sec
          * [turningRadius] desired turning radius in meters
          */
-        fun setRobotMotion(speed : Float, turningRadius : Float)
+        fun setRobotMotion(state : RobotState)
 
         /**
          * Sets the loudness of the speaker on the robot
