@@ -11,7 +11,7 @@ interface MainActivityViewInterface {
      * [robotName] Human Friendly Name of the robot. Can be changed by the user
      * [robotDescription] Short Description of the robot. Useful for the user
      */
-    data class RobotViewData(val UUID : String, val robotName : String, val robotDescription : String, val isFavorite : String)
+    data class RobotViewData(val UUID : String, val robotName : String, val robotDescription : String, val isFavorite : Boolean)
 
     /**
      * Displays a list of Robots that are available
