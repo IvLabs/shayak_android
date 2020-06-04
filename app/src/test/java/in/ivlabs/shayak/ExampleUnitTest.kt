@@ -1,4 +1,4 @@
-package com.ivlabs.shayak
+package `in`.ivlabs.shayak
 
 import org.junit.Test
 

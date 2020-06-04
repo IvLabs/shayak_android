@@ -1,4 +1,4 @@
-package com.ivlabs.shayak.navigateactivity
+package `in`.ivlabs.shayak.navigateactivity
 
 /**
  * Interface for View in MVP pattern for Navigate Activity

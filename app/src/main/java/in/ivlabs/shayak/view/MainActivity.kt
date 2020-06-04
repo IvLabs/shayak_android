@@ -1,4 +1,4 @@
-package com.ivlabs.shayak.view
+package `in`.ivlabs.shayak.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

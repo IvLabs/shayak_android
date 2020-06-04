@@ -1,4 +1,4 @@
-package com.ivlabs.shayak.model.robot
+package `in`.ivlabs.shayak.model.robot
 
 /**
  * This interface is used to implement the robot controller

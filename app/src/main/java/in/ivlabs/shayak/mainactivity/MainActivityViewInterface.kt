@@ -1,4 +1,4 @@
-package com.ivlabs.shayak.mainactivity
+package `in`.ivlabs.shayak.mainactivity
 
 /**
  * Interface for View in MVP pattern for MainActivity

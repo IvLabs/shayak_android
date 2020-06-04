@@ -1,4 +1,4 @@
-package com.ivlabs.shayak
+package `in`.ivlabs.shayak
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
