@@ -22,6 +22,7 @@ android:
     - extra-google-m2repository
     - extra-android-m2repository
 script:
+  - chmod +x ./gradlew
   - ./gradlew test
 before_cache:
   - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
@@ -30,3 +31,5 @@ cache:
     - $HOME/.m2
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
+after_success:
+    - bash <(curl -s https://codecov.io/bash)
