@@ -1,0 +1,11 @@
+language: android
+dist: trusty
+android:
+  components:
+    - build-tools-29.0.3
+    - android-29
+
+    # Additional components
+    - extra-google-google_play_services
+    - extra-google-m2repository
+    - extra-android-m2repository
