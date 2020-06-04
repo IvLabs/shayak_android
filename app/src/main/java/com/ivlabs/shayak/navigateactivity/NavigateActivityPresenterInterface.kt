@@ -1,5 +1,8 @@
 package com.ivlabs.shayak.navigateactivity
 
+/**
+ * Interface for Presenter in MVP pattern for Navigate Activity
+ */
 interface NavigateActivityPresenterInterface {
 
     /**

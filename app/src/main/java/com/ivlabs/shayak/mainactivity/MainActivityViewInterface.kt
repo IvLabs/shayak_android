@@ -1,5 +1,8 @@
 package com.ivlabs.shayak.mainactivity
 
+/**
+ * Interface for View in MVP pattern for MainActivity
+ */
 interface MainActivityViewInterface {
 
     /**
