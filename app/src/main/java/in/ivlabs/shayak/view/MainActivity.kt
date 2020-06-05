@@ -39,7 +39,6 @@ class MainActivity : AppCompatActivity(), MainActivityViewInterface,
                     RobotItem(it)
                 }.toList()
         )
-        Toast.makeText(this, "Here!", Toast.LENGTH_SHORT).show()
     }
 
     override fun robotConnected(UUID: String) {
