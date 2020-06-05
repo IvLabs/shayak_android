@@ -52,7 +52,7 @@ class MainActivity : AppCompatActivity(), MainActivityViewInterface,
 
     /*Gets Dummy List of Robots to test RecyclerView Population*/
     fun getDummyRobotList(): List<MainActivityViewInterface.RobotViewData> {
-        val ROBOTS_TO_DISPLAY = List<MainActivityViewInterface.RobotViewData>(5) {
+        val robotList = List<MainActivityViewInterface.RobotViewData>(5) {
             MainActivityViewInterface.RobotViewData(
                 "$it",
                 "Robot $it",
