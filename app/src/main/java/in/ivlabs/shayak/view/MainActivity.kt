@@ -14,9 +14,6 @@ import com.mikepenz.fastadapter.adapters.ItemAdapter
 import com.mikepenz.fastadapter.items.AbstractItem
 import kotlinx.android.synthetic.main.activity_main.*
 
-val Boolean.int
-    get() = if (this) 1 else 0
-
 class MainActivity : AppCompatActivity(), MainActivityViewInterface {
     val presenter = MainActivityPresenter(this)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,10 +29,9 @@ class MainActivity : AppCompatActivity(), MainActivityViewInterface {
         main_recycler.adapter = fastAdapter
         main_recycler.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         robotAdapter.add(
-            list.sortedWith(Comparator { o1: MainActivityViewInterface.RobotViewData, o2: MainActivityViewInterface.RobotViewData -> o2.isFavorite.int - o1.isFavorite.int })
-                .map {
-                    RobotItem(it)
-                }.toList()
+            list.sortedByDescending { it.isFavorite }.map {
+                RobotItem(it)
+            }.toList()
         )
     }
 
