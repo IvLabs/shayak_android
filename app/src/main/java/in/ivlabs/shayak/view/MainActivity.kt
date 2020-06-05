@@ -3,12 +3,11 @@ package `in`.ivlabs.shayak.view
 import `in`.ivlabs.shayak.mainactivity.MainActivityPresenterInterface
 import `in`.ivlabs.shayak.mainactivity.MainActivityViewInterface
 import android.graphics.Color
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ivlabs.shayak.R
@@ -59,7 +58,7 @@ class MainActivity : AppCompatActivity(), MainActivityViewInterface,
                 it % 2 == 0
             )
         }
-        return ROBOTS_TO_DISPLAY
+        return robotList
     }
 }
 
@@ -71,14 +70,14 @@ class RobotItem(robot: MainActivityViewInterface.RobotViewData) :
     val uuid = robot.UUID
 
     class ViewHolder(view: View) : FastAdapter.ViewHolder<RobotItem>(view) {
-        var name_textView = view.findViewById<TextView>(R.id.robot_card_title)
-        var description_textView = view.findViewById<TextView>(R.id.robot_card_description)
-        var favourite_imageView = view.findViewById<ImageView>(R.id.robot_card_favourite)
+        var nameTextview = view.findViewById<TextView>(R.id.robot_card_title)
+        var descriptionTextview = view.findViewById<TextView>(R.id.robot_card_description)
+        var favouriteImageview = view.findViewById<ImageView>(R.id.robot_card_favourite)
         override fun bindView(item: RobotItem, payloads: List<Any>) {
-            name_textView.text = item.name
-            description_textView.text = item.description
+            nameTextview.text = item.name
+            descriptionTextview.text = item.description
             if (item.favourite) {
-                favourite_imageView.setColorFilter(Color.BLUE)
+                favouriteImageview.setColorFilter(Color.BLUE)
             }
         }
 
