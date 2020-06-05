@@ -64,7 +64,7 @@ class MainActivity : AppCompatActivity(), MainActivityViewInterface,
     }
 }
 
-open class RobotItem(robot: MainActivityViewInterface.RobotViewData) :
+class RobotItem(robot: MainActivityViewInterface.RobotViewData) :
     AbstractItem<RobotItem.ViewHolder>() {
     val name = robot.robotName
     val description = robot.robotDescription
