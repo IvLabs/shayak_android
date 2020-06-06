@@ -1,6 +1,7 @@
 package `in`.ivlabs.shayak.view
 
 import `in`.ivlabs.shayak.mainactivity.MainActivityViewInterface
+import `in`.ivlabs.shayak.storage.RobotStorageInterface
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
@@ -15,15 +16,18 @@ import com.mikepenz.fastadapter.items.AbstractItem
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), MainActivityViewInterface {
-    val presenter = MainActivityPresenter(this)
+    var presenter: MainActivityPresenter? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val robotList = presenter.getRobotsList()
-        displayRobotList(robotList)
+        presenter = MainActivityPresenter(this)
+        main_add_fab.setOnClickListener {
+            val bottomSheet = MainBottomSheet(presenter!!)
+            bottomSheet.show(supportFragmentManager, bottomSheet.tag)
+        }
     }
 
-    override fun displayRobotList(list: List<MainActivityViewInterface.RobotViewData>) {
+    override fun displayRobotList(list: List<RobotStorageInterface.RobotData>) {
         val robotAdapter = ItemAdapter<RobotItem>()
         val fastAdapter = FastAdapter.with(robotAdapter)
         main_recycler.adapter = fastAdapter
@@ -41,7 +45,7 @@ class MainActivity : AppCompatActivity(), MainActivityViewInterface {
 
 }
 
-class RobotItem(robot: MainActivityViewInterface.RobotViewData) :
+class RobotItem(robot: RobotStorageInterface.RobotData) :
     AbstractItem<RobotItem.ViewHolder>() {
     val name = robot.robotName
     val description = robot.robotDescription

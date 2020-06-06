@@ -1,5 +1,7 @@
 package `in`.ivlabs.shayak.mainactivity
 
+import `in`.ivlabs.shayak.storage.RobotStorageInterface
+
 /**
  * Interface for Presenter in MVP pattern for MainActivity
  */
@@ -12,10 +14,7 @@ interface MainActivityPresenterInterface {
      */
     fun connectToRobot(UUID : String) : Boolean
 
-    /**
-     *
-     *
-     * @return a list containing all saved robots
-     */
-    fun getRobotsList():List<MainActivityViewInterface.RobotViewData>
+    fun storeRobot(robot:RobotStorageInterface.RobotData)
+
+    fun forwardRobotsList(robotList: List<RobotStorageInterface.RobotData>)
 }
