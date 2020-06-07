@@ -1,5 +1,6 @@
-package `in`.ivlabs.shayak.view
+package `in`.ivlabs.shayak.mainactivity
 
+import `in`.ivlabs.shayak.mainactivity.MainActivity
 import `in`.ivlabs.shayak.mainactivity.MainActivityPresenterInterface
 import `in`.ivlabs.shayak.storage.RobotStorage
 import `in`.ivlabs.shayak.storage.RobotStorageInterface

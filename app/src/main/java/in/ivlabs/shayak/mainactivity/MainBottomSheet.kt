@@ -1,4 +1,4 @@
-package `in`.ivlabs.shayak.view
+package `in`.ivlabs.shayak.mainactivity
 
 import `in`.ivlabs.shayak.storage.RobotStorageInterface
 import android.app.Dialog

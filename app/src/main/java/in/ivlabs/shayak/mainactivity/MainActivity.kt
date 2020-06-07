@@ -1,6 +1,5 @@
-package `in`.ivlabs.shayak.view
+package `in`.ivlabs.shayak.mainactivity
 
-import `in`.ivlabs.shayak.mainactivity.MainActivityViewInterface
 import `in`.ivlabs.shayak.storage.RobotStorageInterface
 import android.graphics.Color
 import android.os.Bundle
@@ -22,7 +21,8 @@ class MainActivity : AppCompatActivity(), MainActivityViewInterface {
         setContentView(R.layout.activity_main)
         presenter = MainActivityPresenter(this)
         main_add_fab.setOnClickListener {
-            val bottomSheet = MainBottomSheet(presenter!!)
+            val bottomSheet =
+                MainBottomSheet(presenter!!)
             bottomSheet.show(supportFragmentManager, bottomSheet.tag)
         }
     }

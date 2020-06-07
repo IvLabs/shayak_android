@@ -1,6 +1,6 @@
 package `in`.ivlabs.shayak.storage
 
-import `in`.ivlabs.shayak.view.MainActivityPresenter
+import `in`.ivlabs.shayak.mainactivity.MainActivityPresenter
 import androidx.room.Room
 
 class RobotStorage(val presenter: MainActivityPresenter) : RobotStorageInterface {
