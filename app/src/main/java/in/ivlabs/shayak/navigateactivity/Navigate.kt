@@ -14,73 +14,58 @@ import android.widget.Toast
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.ivlabs.shayak.R
 import kotlinx.android.synthetic.main.activity_navigate.*
+import java.lang.NullPointerException
 import java.util.*
 
 class Navigate : AppCompatActivity() , NavigateActivityPresenterInterface, NavigateActivityViewInterface{
     var muteStatus = 0
     var oldLevel=0
-
+    var minV=0;
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_navigate)
-       //mute the call
-        muteButton.setOnClickListener{
-            muteCall()
-        }
-        //end the call
-        EndCallButton.setOnClickListener{
-            toggleTabVideo()
-            val intent: Intent = Intent(this,MainActivity::class.java)
-            startActivity(intent)
-        }
-        val audioManager : AudioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
-        val maxVol = audioManager.getStreamMaxVolume(AudioManager.STREAM_VOICE_CALL)
-        val currentVol = audioManager.getStreamVolume(AudioManager.STREAM_VOICE_CALL)
-        volumeSeekBar.max = maxVol
-        volumeSeekBar.progress = currentVol
+
+        volumeSeekBar.max = getRobotMaxVol()
+        volumeSeekBar.progress = getRobotCurrentVol()
+
         volumeSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-
-            override fun onProgressChanged(seekBar: SeekBar, i: Int, b: Boolean) {
-                // Display the current progress of SeekBar
-                audioManager.setStreamVolume(AudioManager.STREAM_VOICE_CALL, i,0)
-                setRobotAudioLevel(i.toFloat())
+            override fun onProgressChanged(seek: SeekBar, progress: Int, fromUser: Boolean) {
+                // write custom code for progress is changed
+                updateRobotAudioLevel(progress.toFloat())
 
             }
 
-            override fun onStartTrackingTouch(seekBar: SeekBar) {
-                // Do something
-
+            override fun onStartTrackingTouch(seek: SeekBar) {
+                // write custom code for progress is started
             }
 
-            override fun onStopTrackingTouch(seekBar: SeekBar) {
-                // Do something
+            override fun onStopTrackingTouch(seek: SeekBar) {
+                // write custom code for progress is stopped
 
             }
         })
 
+        muteButton.setOnClickListener{
+            if(muteStatus == 0){
 
-    }
-
-
-
-    private fun muteCall(){
-        //unComment updateRobotAudioLevel after implemenating it
-        if (muteStatus == 0){
-            oldLevel = volumeSeekBar.progress
-            muteButton.setImageResource(android.R.drawable.presence_audio_online)
-            setRobotAudioLevel(0.0f)
-            volumeSeekBar.progress = 0
-            muteStatus=1
-        }
-        else{
-            if(volumeSeekBar.progress > 0){
                 oldLevel = volumeSeekBar.progress
+                updateRobotAudioLevel(1.0f)
+                muteStatus = 1
+                volumeSeekBar.progress = 0
             }
-            muteButton.setImageResource(android.R.drawable.stat_notify_call_mute)
-            volumeSeekBar.progress=oldLevel
-            setRobotAudioLevel(oldLevel.toFloat())
-            muteStatus = 0
+            else{
+                updateRobotAudioLevel(oldLevel.toFloat())
+                muteStatus = 0
+                volumeSeekBar.progress=oldLevel
+            }
         }
+
+        EndCallButton.setOnClickListener{
+            toggleTabVideo()
+        }
+
+
+
     }
 
     override fun updateJoystickInput(xAxisLocation: Float, yAxisLocation: Float) {
@@ -102,8 +87,24 @@ class Navigate : AppCompatActivity() , NavigateActivityPresenterInterface, Navig
         //("Not yet implemented")
     }
 
+    override fun getRobotMaxVol(): Int {
+        //dummy function for now
+        val audioManager : AudioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
+
+        return audioManager.getStreamMaxVolume(AudioManager.STREAM_VOICE_CALL)
+    }
+
+    override fun getRobotCurrentVol(): Int {
+        val audioManager : AudioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
+
+        return audioManager.getStreamVolume(AudioManager.STREAM_VOICE_CALL)
+    }
+
+
     override fun updateRobotAudioLevel(level: Float) {
-        //implement it
+        //implement it, for now it control mobile audio
+        val audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
+        audioManager.setStreamVolume(AudioManager.STREAM_VOICE_CALL, level.toInt(),1)
     }
 
     override fun updateBatteryCharge(level: Float) {

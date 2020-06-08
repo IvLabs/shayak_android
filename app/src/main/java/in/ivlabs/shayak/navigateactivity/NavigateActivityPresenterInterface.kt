@@ -24,4 +24,11 @@ interface NavigateActivityPresenterInterface {
      */
     fun toggleTabVideo()
 
+    // get the volume limit from the robot
+    fun getRobotMaxVol() :Int
+
+    //get the current volume from the robot
+    fun getRobotCurrentVol() : Int
+
+
 }
