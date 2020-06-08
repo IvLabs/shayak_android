@@ -64,6 +64,11 @@ class Navigate : AppCompatActivity() , NavigateActivityPresenterInterface, Navig
             toggleTabVideo()
         }
 
+        moveForwardButton.setOnClickListener { updateJoystickInput(0.0f,1.0f) }
+        moveBackwardButton.setOnClickListener { updateJoystickInput(0.0f,-1.0f) }
+        leftTurnButton.setOnClickListener { updateJoystickInput(-1.0f,0.0f) }
+        rightTurnButton.setOnClickListener { updateJoystickInput(1.0f,0.0f) }
+
 
 
     }
