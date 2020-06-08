@@ -12,10 +12,10 @@
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/EndCallButton"
@@ -23,51 +23,51 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="176dp"
         android:layout_marginLeft="176dp"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="52dp"
         android:clickable="true"
+        android:focusable="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@android:drawable/presence_video_busy"
-        android:focusable="true" />
+        app:srcCompat="@android:drawable/presence_video_busy" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/muteButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="52dp"
         android:clickable="true"
+        android:focusable="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/EndCallButton"
-        app:layout_constraintHorizontal_bias="0.491"
+        app:layout_constraintHorizontal_bias="0.508"
         app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@android:drawable/stat_notify_call_mute"
-        android:focusable="true" />
+        app:srcCompat="@android:drawable/stat_notify_call_mute" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/moveForwardButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="488dp"
         android:layout_marginEnd="72dp"
         android:layout_marginRight="72dp"
+        android:layout_marginBottom="56dp"
         android:clickable="true"
+        android:focusable="true"
+        app:layout_constraintBottom_toTopOf="@+id/movBackwardButton"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/arrow_up_float"
-        android:focusable="true" />
+        app:srcCompat="@android:drawable/arrow_up_float" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/movBackwardButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="56dp"
         android:layout_marginEnd="72dp"
         android:layout_marginRight="72dp"
+        android:layout_marginBottom="72dp"
         android:clickable="true"
+        android:focusable="true"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/moveForwardButton"
-        app:srcCompat="@android:drawable/arrow_down_float"
-        android:focusable="true" />
+        app:srcCompat="@android:drawable/arrow_down_float" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/rightTurnButton"
@@ -76,10 +76,10 @@
         android:layout_marginEnd="16dp"
         android:layout_marginRight="16dp"
         android:clickable="true"
+        android:focusable="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/moveForwardButton"
-        app:srcCompat="@android:drawable/ic_media_next"
-        android:focusable="true" />
+        app:srcCompat="@android:drawable/ic_media_next" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/leftTurnButton"
@@ -88,23 +88,30 @@
         android:layout_marginEnd="56dp"
         android:layout_marginRight="56dp"
         android:clickable="true"
+        android:focusable="true"
         app:layout_constraintEnd_toStartOf="@+id/rightTurnButton"
         app:layout_constraintTop_toBottomOf="@+id/moveForwardButton"
-        app:srcCompat="@android:drawable/ic_media_previous"
-        android:focusable="true" />
+        app:srcCompat="@android:drawable/ic_media_previous" />
 
     <SeekBar
         android:id="@+id/volumeSeekBar"
         android:layout_width="0dp"
         android:layout_height="30dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="44dp"
+        android:layout_marginStart="45dp"
+        android:layout_marginLeft="45dp"
+        android:layout_marginTop="56dp"
         android:layout_marginEnd="128dp"
         android:layout_marginRight="128dp"
-        android:thumb="@android:drawable/ic_lock_silent_mode_off"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.108"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        app:layout_constraintEnd_toStartOf="@+id/volumeSeekBar"
+        app:layout_constraintTop_toTopOf="@+id/volumeSeekBar"
+        app:srcCompat="@android:drawable/ic_lock_silent_mode_off" />
 </androidx.constraintlayout.widget.ConstraintLayout>
