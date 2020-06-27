@@ -17,9 +17,6 @@ class serverActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_server)
-        val list = mutableListOf<String>()
-        val myAdapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, list);
-        ShowMsg.adapter=myAdapter;
 
 
     }
