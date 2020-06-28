@@ -1,25 +1,31 @@
 package `in`.ivlabs.shayak.mainactivity
 
+import `in`.ivlabs.shayak.model.robot.RobotConnection
 import `in`.ivlabs.shayak.storage.RobotStorageInterface
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.ivlabs.shayak.R
 import com.mikepenz.fastadapter.FastAdapter
+import com.mikepenz.fastadapter.IAdapter
 import com.mikepenz.fastadapter.adapters.ItemAdapter
 import com.mikepenz.fastadapter.items.AbstractItem
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), MainActivityViewInterface {
     var presenter: MainActivityPresenter? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         presenter = MainActivityPresenter(this)
+
         main_add_fab.setOnClickListener {
             val bottomSheet =
                 MainBottomSheet(presenter!!)
@@ -27,6 +33,7 @@ class MainActivity : AppCompatActivity(), MainActivityViewInterface {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.Q)
     override fun displayRobotList(list: List<RobotStorageInterface.RobotData>) {
         val robotAdapter = ItemAdapter<RobotItem>()
         val fastAdapter = FastAdapter.with(robotAdapter)
@@ -37,6 +44,9 @@ class MainActivity : AppCompatActivity(), MainActivityViewInterface {
                 RobotItem(it)
             }.toList()
         )
+        fastAdapter.onClickListener = { view: View?, iAdapter: IAdapter<RobotItem>, robotItem: RobotItem, i: Int ->
+            presenter!!.connectToRobot(robotItem.uuid)
+        }
     }
 
     override fun robotConnected(UUID: String) {
