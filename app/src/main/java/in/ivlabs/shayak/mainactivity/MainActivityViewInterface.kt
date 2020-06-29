@@ -15,6 +15,6 @@ interface MainActivityViewInterface {
     /**
      * Notifies the view that the robot was connected
      */
-    fun robotConnected(UUID: String)
+    fun robotConnected(robot: RobotStorageInterface.RobotData)
 
 }

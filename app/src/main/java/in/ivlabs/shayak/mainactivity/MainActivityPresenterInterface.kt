@@ -12,9 +12,13 @@ interface MainActivityPresenterInterface {
      * [UUID] Unique ID of the robot
      * @return returns true if connection is established
      */
-    fun connectToRobot(UUID : String) : Boolean
+    fun connectToRobot(robot: RobotStorageInterface.RobotData): Boolean
 
-    fun storeRobot(robot:RobotStorageInterface.RobotData)
+    fun storeRobot(robot: RobotStorageInterface.RobotData)
 
     fun forwardRobotsList(robotList: List<RobotStorageInterface.RobotData>)
+
+    fun connectedCallback(robot: RobotStorageInterface.RobotData)
+
+    fun sendMessage(msg: String)
 }

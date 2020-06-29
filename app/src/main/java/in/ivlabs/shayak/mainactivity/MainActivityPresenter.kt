@@ -6,6 +6,7 @@ import `in`.ivlabs.shayak.storage.RobotStorageInterface
 import android.os.Build
 import androidx.annotation.RequiresApi
 
+@RequiresApi(Build.VERSION_CODES.Q)
 class MainActivityPresenter(val activity: MainActivity) : MainActivityPresenterInterface {
     val storage = RobotStorage(this)
     val connection = RobotConnection(this)
@@ -18,9 +19,17 @@ class MainActivityPresenter(val activity: MainActivity) : MainActivityPresenterI
     }
 
     @RequiresApi(Build.VERSION_CODES.Q)
-    override fun connectToRobot(UUID: String): Boolean {
-        connection.connect(UUID)
+    override fun connectToRobot(robot: RobotStorageInterface.RobotData): Boolean {
+        connection.connect(robot)
         return true
+    }
+
+    override fun connectedCallback(robot: RobotStorageInterface.RobotData) {
+        activity.robotConnected(robot)
+    }
+
+    override fun sendMessage(msg: String) {
+        connection.sendMessage(msg)
     }
 
     /**

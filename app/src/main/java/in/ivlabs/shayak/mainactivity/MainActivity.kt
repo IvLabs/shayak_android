@@ -1,6 +1,5 @@
 package `in`.ivlabs.shayak.mainactivity
 
-import `in`.ivlabs.shayak.model.robot.RobotConnection
 import `in`.ivlabs.shayak.storage.RobotStorageInterface
 import android.graphics.Color
 import android.os.Build
@@ -8,6 +7,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,6 +21,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : AppCompatActivity(), MainActivityViewInterface {
     var presenter: MainActivityPresenter? = null
 
+    @RequiresApi(Build.VERSION_CODES.Q)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -44,18 +45,22 @@ class MainActivity : AppCompatActivity(), MainActivityViewInterface {
                 RobotItem(it)
             }.toList()
         )
-        fastAdapter.onClickListener = { view: View?, iAdapter: IAdapter<RobotItem>, robotItem: RobotItem, i: Int ->
-            presenter!!.connectToRobot(robotItem.uuid)
-        }
+        fastAdapter.onClickListener =
+            { view: View?, iAdapter: IAdapter<RobotItem>, robotItem: RobotItem, i: Int ->
+                presenter!!.connectToRobot(robotItem.robot)
+            }
     }
 
-    override fun robotConnected(UUID: String) {
-        TODO("Not yet implemented")
+    override fun robotConnected(robot: RobotStorageInterface.RobotData) {
+        Toast.makeText(this, "Robot Connected, move to screen 2 here!", Toast.LENGTH_SHORT).show()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            presenter?.sendMessage("Hello World!")
+        }
     }
 
 }
 
-class RobotItem(robot: RobotStorageInterface.RobotData) :
+class RobotItem(val robot: RobotStorageInterface.RobotData) :
     AbstractItem<RobotItem.ViewHolder>() {
     val name = robot.robotName
     val description = robot.robotDescription

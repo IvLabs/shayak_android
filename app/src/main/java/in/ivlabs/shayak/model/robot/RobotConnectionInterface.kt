@@ -1,5 +1,7 @@
 package `in`.ivlabs.shayak.model.robot
 
+import `in`.ivlabs.shayak.storage.RobotStorageInterface
+
 /**
  * Interface for connecting to the robot
  */
@@ -10,7 +12,7 @@ interface RobotConnectionInterface {
      * [UUID] Unique Identifer for the robot to be connected to
      * @return true if connection is established
      */
-    fun connect(UUID: String): Boolean
+    fun connect(robot:RobotStorageInterface.RobotData): Boolean
 
     /**
      * Disconnects from the robot
@@ -22,7 +24,7 @@ interface RobotConnectionInterface {
      * [msg] message to be sent
      * @return response from the robot
      */
-    fun sendRequest(msg: String): String
+    fun sendMessage(msg: String): String
 
     /**
      * Checks if the connection to the robot is still alive

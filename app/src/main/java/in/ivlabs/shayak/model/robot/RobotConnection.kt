@@ -1,8 +1,10 @@
 package `in`.ivlabs.shayak.model.robot
 
 import `in`.ivlabs.shayak.mainactivity.MainActivityPresenter
+import `in`.ivlabs.shayak.storage.RobotStorageInterface
 import android.content.Context
 import android.net.ConnectivityManager
+import android.net.Network
 import android.net.NetworkCapabilities
 import android.net.NetworkRequest
 import android.net.wifi.WifiNetworkSpecifier
@@ -10,48 +12,23 @@ import android.os.Build
 import android.os.StrictMode
 import android.widget.Toast
 import androidx.annotation.RequiresApi
-import org.json.JSONObject
 import java.io.DataOutputStream
 import java.net.Socket
 
 
 class RobotConnection(private val presenter: MainActivityPresenter) : RobotConnectionInterface {
-    val ssid = "TP-LINK_D3B6"
-    val pass = "39806437"
+
+    private var dataOutputStream: DataOutputStream? = null
 
     @RequiresApi(Build.VERSION_CODES.Q)
-    override fun connect(UUID: String): Boolean {
+    override fun connect(robot: RobotStorageInterface.RobotData): Boolean {
+        val wifiDetails = getWifiNetworkDetails(robot)
+        val ssid = wifiDetails.first
+        val pass = wifiDetails.second
         val policy =
             StrictMode.ThreadPolicy.Builder().permitAll().build()
         StrictMode.setThreadPolicy(policy)
         Toast.makeText(presenter.activity, "In Connect", Toast.LENGTH_LONG).show()
-        /*val specifier = WifiNetworkSpecifier.Builder()
-            .setSsidPattern(PatternMatcher("TP-LINK_D3B6", PatternMatcher.PATTERN_PREFIX))
-            .setWpa2Passphrase("39806437")
-            .build()
-
-        val request = NetworkRequest.Builder()
-            .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
-            .removeCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
-            .setNetworkSpecifier(specifier)
-            .build()
-
-        val connectivityManager =
-            presenter.activity.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-
-        val networkCallback = object : ConnectivityManager.NetworkCallback() {
-            override fun onAvailable(network: Network?) {
-                Toast.makeText(presenter.activity, "CONNECTED", Toast.LENGTH_LONG).show()
-
-            }
-
-            override fun onUnavailable() {
-                Toast.makeText(presenter.activity, "UNAVAILABLE", Toast.LENGTH_LONG).show()
-            }
-        }
-        connectivityManager.requestNetwork(request, networkCallback)
-// Release the request when done.
-        connectivityManager.unregisterNetworkCallback(networkCallback)*/
         val wifiNetworkSpecifier = WifiNetworkSpecifier.Builder()
             .setSsid(ssid)
             .setWpa2Passphrase(pass)
@@ -64,16 +41,16 @@ class RobotConnection(private val presenter: MainActivityPresenter) : RobotConne
 
         val connectivityManager =
             presenter.activity.applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
-
-        connectivityManager?.requestNetwork(networkRequest, ConnectivityManager.NetworkCallback())
-
-        val json = JSONObject()
-        json.put("test_message", "Hello World!")
-        val s = Socket("192.168.1.105", 6969)
-        val dos = DataOutputStream(s.getOutputStream())
-        dos.writeUTF("Hello World!")
-        dos.close()
-        s.close()
+        connectivityManager?.requestNetwork(networkRequest, object :
+            ConnectivityManager.NetworkCallback() {
+            override fun onAvailable(network: Network) {
+                connectivityManager.bindProcessToNetwork(network)
+                Toast.makeText(presenter.activity, "Sending Shizz", Toast.LENGTH_SHORT).show()
+                val s = Socket("192.168.1.105", 12345)
+                dataOutputStream = DataOutputStream(s.getOutputStream())
+                presenter.connectedCallback(robot)
+            }
+        })
         return true
     }
 
@@ -81,8 +58,10 @@ class RobotConnection(private val presenter: MainActivityPresenter) : RobotConne
         TODO("Not yet implemented")
     }
 
-    override fun sendRequest(msg: String): String {
-        TODO("Not yet implemented")
+    override fun sendMessage(msg: String): String {
+        dataOutputStream?.writeUTF(msg)
+        dataOutputStream?.flush()
+        return msg
     }
 
     override fun isAlive(): Boolean {
@@ -93,5 +72,15 @@ class RobotConnection(private val presenter: MainActivityPresenter) : RobotConne
         TODO("Not yet implemented")
     }
 
-
+    /**
+     * Get Wifi Network Details for a specific Robot. Returns Dummy Data now
+     *
+     * @param UUID: String UUID of robot.
+     * @return
+     */
+    private fun getWifiNetworkDetails(robot: RobotStorageInterface.RobotData): Pair<String, String> {
+        val ssid = "TP-LINK_D3B6"
+        val pass = "39806437"
+        return Pair(ssid, pass)
+    }
 }
