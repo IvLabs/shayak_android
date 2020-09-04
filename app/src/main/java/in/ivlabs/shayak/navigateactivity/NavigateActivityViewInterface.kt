@@ -9,7 +9,7 @@ interface NavigateActivityViewInterface {
      * Updates the audio level display
      * [level] Audio level (0.0 to 1.0) where 0.0 is mute and 1.0 is loudest
      */
-    fun updateRobotAudioLevel(level : Float)
+    fun updateRobotAudioLevel(level: Int)
 
     /**
      * Updates the Battery level display

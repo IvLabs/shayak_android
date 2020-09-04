@@ -1,6 +1,7 @@
 package `in`.ivlabs.shayak.view
 
 import `in`.ivlabs.shayak.model.robot.RobotDatabaseInterface
+import `in`.ivlabs.shayak.robotconnectionactivity.RobotConnectionActivityPresenter
 import `in`.ivlabs.shayak.robotconnectionactivity.RobotConnectionActivityViewInterface
 import android.os.Bundle
 import android.util.SparseArray
@@ -21,7 +22,10 @@ class RobotConnectionActivity : AppCompatActivity(),
 RobotConnectionActivityViewInterface,
 BarcodeReader.BarcodeReaderListener
 {
-    private var mPresenter = RobotConnectionActivityPresenter(this)
+    private var mPresenter =
+        RobotConnectionActivityPresenter(
+            this
+        )
     var barcodeReader: BarcodeReader? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {

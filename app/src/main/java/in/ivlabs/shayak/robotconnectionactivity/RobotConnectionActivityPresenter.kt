@@ -1,4 +1,4 @@
-package `in`.ivlabs.shayak.view
+package `in`.ivlabs.shayak.robotconnectionactivity
 
 import `in`.ivlabs.shayak.model.robot.RobotRepository
 import `in`.ivlabs.shayak.robotconnectionactivity.RobotConnectionActivityPresenterInterface

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+  <androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="in.ivlabs.shayak.view.NavigateActivity">
+
+  <VideoView
+      android:id="@+id/videoView"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent" />
+
+  <com.jackandphantom.joystickview.JoyStickView
+      android:id="@+id/joyStickView"
+      android:layout_width="150dp"
+      android:layout_height="150dp"
+      android:layout_alignParentBottom="true"
+      app:innerCircleColor="#B0FFFFFF"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:outerCircleBorderColor="#fff"
+      app:outerCircleBorderWidth="5"
+      app:outerCircleColor="#4DFFFFFF"
+      app:shadowColor="#00000000"
+      app:shadowRadius="7">
+
+  </com.jackandphantom.joystickview.JoyStickView>
+
+  <ImageButton
+      android:id="@+id/robotVolumeButton"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="8dp"
+      android:layout_weight="1"
+      android:src="@drawable/ic_baseline_volume_mute_24"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      tools:src="@drawable/ic_baseline_volume_mute_24" />
+
+  <LinearLayout
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal"
+      app:layout_constraintBottom_toBottomOf="@+id/joyStickView"
+      app:layout_constraintEnd_toStartOf="@+id/joyStickView"
+      app:layout_constraintStart_toStartOf="@+id/videoView"
+      app:layout_constraintTop_toTopOf="@+id/joyStickView">
+
+    <Space
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1" />
+
+    <ImageButton
+        android:id="@+id/enablingButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_button_enabling_released_24" />
+
+    <Space
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1" />
+
+    <ImageButton
+        android:id="@+id/videoButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_button_videocam_enabled_24" />
+
+    <Space
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1" />
+  </LinearLayout>
+
+  <SeekBar
+      android:id="@+id/robotVolumeSeekbar"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      app:layout_constraintBottom_toBottomOf="@+id/robotVolumeButton"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toEndOf="@+id/robotVolumeButton"
+      app:layout_constraintTop_toTopOf="@+id/robotVolumeButton" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

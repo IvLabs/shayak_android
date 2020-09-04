@@ -6,11 +6,17 @@ package `in`.ivlabs.shayak.navigateactivity
 interface NavigateActivityPresenterInterface {
 
     /**
+     * This function runs when view is created
+     * It helps populate the view
+     */
+    fun onViewCreated()
+
+    /**
      * Starts/Updates the motion of the robot if robot is connected
      * [xAxisLocation] normalized value of x location of the joystick (-1.0 to 1.0)
      * [yAxisLocation] normalized value of y location of the joystick (-1.0 to 1.0)
      */
-    fun updateJoystickInput(xAxisLocation : Float, yAxisLocation : Float)
+    fun updateJoystickInput(angle: Double, strength: Float)
 
     /**
      * Sets the loudness of the speaker on the robot
@@ -23,5 +29,10 @@ interface NavigateActivityPresenterInterface {
      * On/Off
      */
     fun toggleTabVideo()
+
+    /**
+     * Mutes/Unmutes the robot speaker
+     */
+    fun toggleRobotAudio()
 
 }

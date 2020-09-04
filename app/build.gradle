@@ -22,7 +22,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
 }
+
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
@@ -35,6 +37,12 @@ dependencies {
     /* For barcode scanner */
     implementation 'info.androidhive:barcode-reader:1.1.5'
     implementation 'com.google.android.gms:play-services-vision:11.0.2'
+
+    /* For Joy stick*/
+    implementation 'com.jackandphantom.android:joystickview:1.0.2'
+
+    /* For RTSP */
+    'com.github.potterhsu:RtspLibrary:v1.0'
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
