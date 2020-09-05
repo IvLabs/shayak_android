@@ -18,4 +18,9 @@ class RobotRepository()
     {
         return FakeRobot()
     }
+
+    fun getCommunicationInterface() : CommunicationInterface
+    {
+        return FakeRobot()
+    }
 }

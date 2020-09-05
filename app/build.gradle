@@ -25,6 +25,11 @@ android {
 
 }
 
+allprojects {
+    repositories {
+        maven { url 'https://jitpack.io' }
+    }
+}
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
@@ -42,7 +47,8 @@ dependencies {
     implementation 'com.jackandphantom.android:joystickview:1.0.2'
 
     /* For RTSP */
-    'com.github.potterhsu:RtspLibrary:v1.0'
+    implementation 'de.mrmaffen:libvlc-android:2.1.12@aar'
+    implementation 'com.github.pedroSG94.rtmp-rtsp-stream-client-java:rtplibrary:1.8.9'
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'

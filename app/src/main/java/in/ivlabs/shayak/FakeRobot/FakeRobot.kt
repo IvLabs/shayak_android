@@ -1,11 +1,13 @@
 package `in`.ivlabs.shayak.FakeRobot
 
-import `in`.ivlabs.shayak.model.robot.HealthMonitorInterface
-import `in`.ivlabs.shayak.model.robot.RobotConnectionInterface
-import `in`.ivlabs.shayak.model.robot.RobotControlInterface
-import `in`.ivlabs.shayak.model.robot.RobotDatabaseInterface
+import `in`.ivlabs.shayak.model.robot.*
+import android.net.Uri
 
-class FakeRobot : HealthMonitorInterface, RobotConnectionInterface, RobotControlInterface, RobotDatabaseInterface
+class FakeRobot : HealthMonitorInterface,
+    RobotConnectionInterface,
+    RobotControlInterface,
+    RobotDatabaseInterface,
+    CommunicationInterface
 {
     override fun isHealthy(): Boolean {
         TODO("Not yet implemented")
@@ -51,6 +53,18 @@ class FakeRobot : HealthMonitorInterface, RobotConnectionInterface, RobotControl
 
     override fun setRobotAsFavorite(UUID: String) {
         TODO("Not yet implemented. Setting Robot as favorite")
+    }
+
+    override fun getRemoteCameraFeedUri(): Uri? {
+        return Uri.parse("rtsp://192.168.29.64:5540/ch0")
+    }
+
+    override fun getRobotAudioLevel(): Double? {
+        return 10.0
+    }
+
+    override fun setRobotAudioLevel(level: Double): Boolean {
+        return true
     }
 
 }

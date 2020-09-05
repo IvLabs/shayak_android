@@ -1,5 +1,7 @@
 package `in`.ivlabs.shayak.model.robot
 
+import android.net.Uri
+
 /**
  * Interface for connecting to the robot
  */
@@ -35,4 +37,5 @@ interface RobotConnectionInterface {
      * @return wireless signal strength (0.0 to 1.0)
      */
     fun getConnectionStrength() : Float
+
 }

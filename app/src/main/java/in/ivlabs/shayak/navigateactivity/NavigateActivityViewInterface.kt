@@ -1,5 +1,8 @@
 package `in`.ivlabs.shayak.navigateactivity
 
+import android.net.Uri
+import org.videolan.libvlc.Media
+
 /**
  * Interface for View in MVP pattern for Navigate Activity
  */
@@ -28,4 +31,11 @@ interface NavigateActivityViewInterface {
      * [state] true if camera is on
      */
     fun updateCameraState(state : Boolean)
+
+
+    /**
+     * Update the camera feed from the robot
+     * [media] camera feed location
+     */
+    fun updateCameraFeed(media : Uri)
 }
