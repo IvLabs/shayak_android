@@ -1,7 +1,6 @@
 package `in`.ivlabs.shayak.navigateactivity
 
 import android.net.Uri
-import org.videolan.libvlc.Media
 
 /**
  * Interface for View in MVP pattern for Navigate Activity

@@ -7,22 +7,19 @@
     android:layout_height="match_parent"
     tools:context="in.ivlabs.shayak.view.NavigateActivity">
 
-  <VideoView
-      android:id="@+id/videoView"
-      android:layout_width="0dp"
+  <org.webrtc.SurfaceViewRenderer
+      android:id="@+id/remote_renderer"
+      android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintHorizontal_bias="1.0"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="parent"
-      app:layout_constraintVertical_bias="0.0" />
+      app:layout_constraintStart_toStartOf="parent" />
 
-  <SurfaceView
-      android:id="@+id/surfaceView"
-      android:layout_width="0dp"
-      android:layout_height="0dp"
-      app:layout_constraintBottom_toBottomOf="parent"
+  <org.webrtc.SurfaceViewRenderer
+      android:id="@+id/local_renderer"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      app:layout_constraintBottom_toTopOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent" />
@@ -60,7 +57,6 @@
       android:orientation="horizontal"
       app:layout_constraintBottom_toBottomOf="@+id/joyStickView"
       app:layout_constraintEnd_toStartOf="@+id/joyStickView"
-      app:layout_constraintStart_toStartOf="@+id/videoView"
       app:layout_constraintTop_toTopOf="@+id/joyStickView">
 
     <Space
