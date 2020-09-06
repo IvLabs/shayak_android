@@ -36,9 +36,8 @@
       app:outerCircleBorderWidth="5"
       app:outerCircleColor="#4DFFFFFF"
       app:shadowColor="#00000000"
-      app:shadowRadius="7">
+      app:shadowRadius="7"/>
 
-  </com.jackandphantom.joystickview.JoyStickView>
 
   <ImageButton
       android:id="@+id/robotVolumeButton"

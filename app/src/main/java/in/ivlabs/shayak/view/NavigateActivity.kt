@@ -19,7 +19,13 @@ import com.jackandphantom.joystickview.JoyStickView
 import kotlinx.android.synthetic.main.activity_navigate.*
 import org.webrtc.*
 import org.webrtc.CameraVideoCapturer.CameraEventsHandler
-import java.util.stream.Stream
+import java.io.BufferedReader
+import java.io.InputStreamReader
+import java.io.PrintWriter
+import java.lang.StringBuilder
+import java.net.Socket
+import java.nio.ByteBuffer
+import java.nio.charset.Charset
 
 
 class NavigateActivity : AppCompatActivity(), NavigateActivityViewInterface,
@@ -34,7 +40,11 @@ class NavigateActivity : AppCompatActivity(), NavigateActivityViewInterface,
     private lateinit var mLocalAudioTrack: AudioTrack
     private lateinit var stream : MediaStream
     private lateinit var mRemoteVideoTrack : VideoTrack
-
+    private val ServerIP = "192.168.29.27"
+    private val ServerPort = 8080
+    private lateinit var output: PrintWriter
+    private lateinit var input: BufferedReader
+    private lateinit var mDataChannel : DataChannel
 
     private val mRootEglBase = EglBase.create()
     var surfaceTextureHelper: SurfaceTextureHelper? = null
@@ -45,13 +55,20 @@ class NavigateActivity : AppCompatActivity(), NavigateActivityViewInterface,
 
         val joyStickView: JoyStickView = findViewById(R.id.joyStickView)
         joyStickView.setOnMoveListener { angle, strength ->
-            mPresenter.updateJoystickInput(angle, strength)
+            val buf  = ByteBuffer.wrap("Hello".toByteArray(Charset.defaultCharset()))
+            mDataChannel.send(DataChannel.Buffer(buf, false))
+            //mPresenter.updateJoystickInput(angle, strength)
         }
 
         val robotVolumeButton = findViewById<ImageButton>(R.id.robotVolumeButton)
         robotVolumeButton.setOnClickListener {
-            call()
             //mPresenter.toggleRobotAudio()
+            Thread{
+                val socket = Socket(ServerIP, ServerPort)
+                output = PrintWriter(socket.getOutputStream());
+                input = BufferedReader(InputStreamReader(socket.getInputStream()));
+                call()
+            }.start()
         }
 
         val robotVolumeBar = findViewById<SeekBar>(R.id.robotVolumeSeekbar)
@@ -99,7 +116,7 @@ class NavigateActivity : AppCompatActivity(), NavigateActivityViewInterface,
 //        val localAudioTrack =
 //            peerConnectionFactory.createAudioTrack("101", audioSource)
 //
-//        //we will start capturing the video from the camera
+//        //we will start capturing the video from the camerasignallingClient
 //        //width,height and fps
 //        //create surface renderer, init it and add the renderer to the track
         mLocalVideoView =
@@ -113,6 +130,8 @@ class NavigateActivity : AppCompatActivity(), NavigateActivityViewInterface,
 
         mLocalVideoView.setZOrderMediaOverlay(true)
         mRemoteVideoView.setZOrderMediaOverlay(true)
+        mLocalVideoView.setEnableHardwareScaler(true)
+        mRemoteVideoView.setEnableHardwareScaler(true)
 //        mLocalVideoView.visibility = View.VISIBLE
 //
 //        //we will start capturing the video from the camera
@@ -130,7 +149,11 @@ class NavigateActivity : AppCompatActivity(), NavigateActivityViewInterface,
     private fun startCall()
     {
         val options = PeerConnectionFactory.InitializationOptions
-            .builder(applicationContext).setEnableInternalTracer(true).createInitializationOptions()
+            .builder(applicationContext)
+            .setEnableInternalTracer(true)
+            .setFieldTrials("WebRTC-IntelVp8Encoder/Enabled/")
+            .setFieldTrials("WebRTC-H264HighProfile/Enabled/")
+            .createInitializationOptions()
         PeerConnectionFactory.initialize(options)
 
         val encoderFactory = DefaultVideoEncoderFactory(mRootEglBase.eglBaseContext, false, true)
@@ -148,7 +171,7 @@ class NavigateActivity : AppCompatActivity(), NavigateActivityViewInterface,
         val videoConstraints = MediaConstraints()
 
         val videoSource = mPeerConnectionFactory.createVideoSource(videoCapturer!!.isScreencast)
-        mLocalVideoTrack = mPeerConnectionFactory.createVideoTrack("100", videoSource)
+        mLocalVideoTrack = mPeerConnectionFactory.createVideoTrack("10230", videoSource)
         videoCapturer.initialize(
             surfaceTextureHelper,
             this,
@@ -156,7 +179,7 @@ class NavigateActivity : AppCompatActivity(), NavigateActivityViewInterface,
         )
 
         val audioSource = mPeerConnectionFactory.createAudioSource(audioConstraints)
-        mLocalAudioTrack = mPeerConnectionFactory.createAudioTrack("101", audioSource);
+        mLocalAudioTrack = mPeerConnectionFactory.createAudioTrack("13143101", audioSource);
 
         mLocalVideoView.visibility = View.VISIBLE
 
@@ -186,20 +209,6 @@ class NavigateActivity : AppCompatActivity(), NavigateActivityViewInterface,
                     super.onIceCandidate(iceCandidate)
                     onIceCandidateReceived(mLocalPeer, iceCandidate)
                 }
-            })!!
-
-
-
-        //creating remotePeer
-
-        //creating remotePeer
-        mRemotePeer = mPeerConnectionFactory.createPeerConnection(
-            iceServerList,
-            object : CustomPeerConnectionObserver("RemotePeerObserver") {
-                override fun onIceCandidate(iceCandidate: IceCandidate?) {
-                    super.onIceCandidate(iceCandidate)
-                    onIceCandidateReceived(mRemotePeer, iceCandidate)
-                }
 
                 override fun onAddTrack(rtpReceiver: RtpReceiver?, p1: Array<out MediaStream>?) {
                     super.onAddTrack(rtpReceiver, p1)
@@ -211,8 +220,47 @@ class NavigateActivity : AppCompatActivity(), NavigateActivityViewInterface,
                 }
             })!!
 
+
+
+        //creating remotePeer
+
+        //creating remotePeer
+//        mRemotePeer = mPeerConnectionFactory.createPeerConnection(
+//            iceServerList,
+//            object : CustomPeerConnectionObserver("RemotePeerObserver") {
+//                override fun onIceCandidate(iceCandidate: IceCandidate?) {
+//                    super.onIceCandidate(iceCandidate)
+//                    onIceCandidateReceived(mRemotePeer, iceCandidate)
+//                }
+//
+//            override fun onAddTrack(rtpReceiver: RtpReceiver?, p1: Array<out MediaStream>?) {
+//                super.onAddTrack(rtpReceiver, p1)
+//                val track = rtpReceiver?.track()
+//                    if (track is VideoTrack) {
+//                        mRemoteVideoTrack = track as VideoTrack
+//                        mRemoteVideoTrack.addSink(mRemoteVideoView)
+//                    }
+//                }
+//
+//            })!!
+
         stream = mPeerConnectionFactory.createLocalMediaStream("1222")
         mLocalPeer.addTrack(mLocalVideoTrack)
+        mDataChannel = mLocalPeer.createDataChannel("new", DataChannel.Init())
+        mDataChannel.registerObserver(object : DataChannel.Observer{
+            override fun onMessage(p0: DataChannel.Buffer?) {
+                Log.d("Datachannel Observer", "onMessage")
+            }
+
+            override fun onBufferedAmountChange(p0: Long) {
+                Log.d("Datachannel Observer", "onBufferedAmountChange")
+            }
+
+            override fun onStateChange() {
+                Log.d("Datachannel Observer", "onStateChange")
+            }
+
+        })
         //stream.addTrack(mLocalAudioTrack)
         //mLocalPeer.addStream(stream)
 
@@ -220,19 +268,48 @@ class NavigateActivity : AppCompatActivity(), NavigateActivityViewInterface,
         {
             override fun onCreateSuccess(sessionDescription: SessionDescription?) {
                 super.onCreateSuccess(sessionDescription)
-                if (sessionDescription != null) {
-                    Log.d("SessionDescriptionToString", sessionDescription.description)
-                }
                 mLocalPeer.setLocalDescription(CustomSpdObserver("localSetLocalDesc"), sessionDescription)
-                mRemotePeer.setRemoteDescription(CustomSpdObserver("remoteSetRemoteDesc"), sessionDescription)
-                mRemotePeer.createAnswer(object : CustomSpdObserver("remoteCreateOffer"){
-                    override fun onCreateSuccess(sessionDescription: SessionDescription?)
+                if(sessionDescription?.description != null) {
+                    val descLines = sessionDescription?.description?.lines().toString()
+                    output.write("$descLines\r\n")
+                    output.flush()
+                }
+
+                Thread{
+                    var done = false;
+                    while(!done)
                     {
-                        super.onCreateSuccess(sessionDescription)
-                        mRemotePeer.setLocalDescription(CustomSpdObserver("remoteSetLocalDesc"), sessionDescription)
-                        mLocalPeer.setRemoteDescription(CustomSpdObserver("localSetRemoteDesc"), sessionDescription)
+                        val answer = input.readLine().replace(", ","\r\n").removePrefix("[").removeSuffix("]")
+                        if(answer != null)
+                        {
+                            mLocalPeer.setRemoteDescription(CustomSpdObserver("localSetRemoteDesc"),
+                                SessionDescription(SessionDescription.Type.ANSWER, answer))
+                            done = true
+                        }
                     }
-                }, sdpConstraints)
+
+                    while(true)
+                    {
+                        val spd = input.readLine()
+                        val spdMid = input.readLine()
+                        val spdMidLineIndex = input.readLine().toInt()
+                        val iceCandidate = IceCandidate(spdMid, spdMidLineIndex, spd)
+                        mLocalPeer.addIceCandidate(iceCandidate)
+                    }
+
+                }.start()
+//                val descLines = sessionDescription?.description?.lines().toString()
+//                val description = descLines.replace(", ","\r\n").removePrefix("[").removeSuffix("]")
+
+//                mRemotePeer.setRemoteDescription(CustomSpdObserver("remoteSetRemoteDesc"),SessionDescription(sessionDescription?.type, description) )
+//                mRemotePeer.createAnswer(object : CustomSpdObserver("remoteCreateOffer"){
+//                    override fun onCreateSuccess(sessionDescription: SessionDescription?)
+//                    {
+//                        super.onCreateSuccess(sessionDescription)
+//                        mRemotePeer.setLocalDescription(CustomSpdObserver("remoteSetLocalDesc"), sessionDescription)
+//                        mLocalPeer.setRemoteDescription(CustomSpdObserver("localSetRemoteDesc"), sessionDescription)
+//                    }
+//                }, sdpConstraints)
             }
         }, sdpConstraints)
 
@@ -244,11 +321,15 @@ class NavigateActivity : AppCompatActivity(), NavigateActivityViewInterface,
         iceCandidate: IceCandidate?
     ) {
         //we have received ice candidate. We can set it to the other peer.
-        if (peer === mLocalPeer) {
-            mRemotePeer.addIceCandidate(iceCandidate)
-        } else {
-            mLocalPeer.addIceCandidate(iceCandidate)
+        //mLocalPeer.addIceCandidate(iceCandidate)
+        Log.d ("Ice Candidate", iceCandidate.toString())
+        if (iceCandidate != null) {
+            output.write(iceCandidate.sdp + "\r\n")
+            output.write(iceCandidate.sdpMid + "\r\n")
+            output.write((iceCandidate.sdpMLineIndex).toString() + "\r\n")
+            output.flush()
         }
+
     }
 
     private fun gotRemoteStream(stream: MediaStream) {

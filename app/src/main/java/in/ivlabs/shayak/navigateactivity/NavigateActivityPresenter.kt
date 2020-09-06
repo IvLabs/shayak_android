@@ -1,9 +1,10 @@
 package `in`.ivlabs.shayak.navigateactivity
 
 import `in`.ivlabs.shayak.model.robot.RobotRepository
+import `in`.ivlabs.shayak.view.NavigateActivity
 import android.net.Uri
 
-class NavigateActivityPresenter (view: NavigateActivityViewInterface) : NavigateActivityPresenterInterface {
+class NavigateActivityPresenter(view: NavigateActivity) : NavigateActivityPresenterInterface {
 
     private var mView: NavigateActivityViewInterface? = view
     private var mRobotConnection = RobotRepository().getRobotConnection()
