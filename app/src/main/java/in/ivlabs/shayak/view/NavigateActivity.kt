@@ -38,6 +38,7 @@ class NavigateActivity : AppCompatActivity(), NavigateActivityViewInterface,
     private lateinit var mRemotePeer : PeerConnection
     private lateinit var mLocalVideoTrack : VideoTrack
     private lateinit var mLocalAudioTrack: AudioTrack
+    private lateinit var mRemoteAudioTrack: AudioTrack
     private lateinit var stream : MediaStream
     private lateinit var mRemoteVideoTrack : VideoTrack
     private val ServerIP = "192.168.29.27"
@@ -210,13 +211,12 @@ class NavigateActivity : AppCompatActivity(), NavigateActivityViewInterface,
                     onIceCandidateReceived(mLocalPeer, iceCandidate)
                 }
 
-                override fun onAddTrack(rtpReceiver: RtpReceiver?, p1: Array<out MediaStream>?) {
-                    super.onAddTrack(rtpReceiver, p1)
-                    val track = rtpReceiver?.track()
-                    if (track is VideoTrack) {
-                        mRemoteVideoTrack = track as VideoTrack
-                        mRemoteVideoTrack.addSink(mRemoteVideoView)
-                    }
+                override fun onAddStream(mediaStream: MediaStream?) {
+                    super.onAddStream(mediaStream)
+                    mRemoteAudioTrack = mediaStream?.audioTracks?.get(0)!!
+                    val mRemoteVideoTrack = mediaStream?.videoTracks?.get(0)
+                    mRemoteVideoTrack?.setEnabled(true)
+                    mRemoteVideoTrack?.addSink(mRemoteVideoView)
                 }
             })!!
 
@@ -245,24 +245,9 @@ class NavigateActivity : AppCompatActivity(), NavigateActivityViewInterface,
 //            })!!
 
         stream = mPeerConnectionFactory.createLocalMediaStream("1222")
-        mLocalPeer.addTrack(mLocalVideoTrack)
-        mDataChannel = mLocalPeer.createDataChannel("new", DataChannel.Init())
-        mDataChannel.registerObserver(object : DataChannel.Observer{
-            override fun onMessage(p0: DataChannel.Buffer?) {
-                Log.d("Datachannel Observer", "onMessage")
-            }
-
-            override fun onBufferedAmountChange(p0: Long) {
-                Log.d("Datachannel Observer", "onBufferedAmountChange")
-            }
-
-            override fun onStateChange() {
-                Log.d("Datachannel Observer", "onStateChange")
-            }
-
-        })
-        //stream.addTrack(mLocalAudioTrack)
-        //mLocalPeer.addStream(stream)
+        stream.addTrack(mLocalVideoTrack)
+        stream.addTrack(mLocalAudioTrack)
+        mLocalPeer.addStream(stream)
 
         mLocalPeer.createOffer( object : CustomSpdObserver("localCreateOffer")
         {

@@ -27,6 +27,7 @@ class RobotRunningActivity : AppCompatActivity() {
     private lateinit var mLocalPeer : PeerConnection
     private lateinit var mRemotePeer : PeerConnection
     private lateinit var mLocalVideoTrack : VideoTrack
+    private lateinit var mRemoteAudioTrack: AudioTrack
     private lateinit var mLocalAudioTrack: AudioTrack
     private lateinit var stream : MediaStream
     private lateinit var mRemoteVideoTrack : VideoTrack
@@ -142,15 +143,23 @@ class RobotRunningActivity : AppCompatActivity() {
                     onIceCandidateReceived(mLocalPeer, iceCandidate)
                 }
 
-                override fun onAddTrack(rtpReceiver: RtpReceiver?, p1: Array<out MediaStream>?) {
-                    super.onAddTrack(rtpReceiver, p1)
-                    val track = rtpReceiver?.track()
-                    if (track is VideoTrack) {
-                        mRemoteVideoTrack = track as VideoTrack
-                        mRemoteVideoTrack.setEnabled(true)
-                        mRemoteVideoTrack.addSink(mRemoteVideoView)
-                    }
+                override fun onAddStream(mediaStream: MediaStream?) {
+                    super.onAddStream(mediaStream)
+                    mRemoteAudioTrack = mediaStream?.audioTracks?.get(0)!!
+                    mRemoteVideoTrack = mediaStream?.videoTracks?.get(0)!!
+                    mRemoteVideoTrack?.setEnabled(true)
+                    mRemoteVideoTrack?.addSink(mRemoteVideoView)
                 }
+
+//                override fun onAddTrack(rtpReceiver: RtpReceiver?, p1: Array<out MediaStream>?) {
+//                    super.onAddTrack(rtpReceiver, p1)
+//                    val track = rtpReceiver?.track()
+//                    if (track is VideoTrack) {
+//                        mRemoteVideoTrack = track as VideoTrack
+//                        mRemoteVideoTrack.setEnabled(true)
+//                        mRemoteVideoTrack.addSink(mRemoteVideoView)
+//                    }
+//                }
 
                 override fun onDataChannel(p0: DataChannel?) {
                     super.onDataChannel(p0)
@@ -190,9 +199,9 @@ class RobotRunningActivity : AppCompatActivity() {
 //            })!!
 
         stream = mPeerConnectionFactory.createLocalMediaStream("122")
-        mLocalPeer.addTrack(mLocalVideoTrack)
-        //stream.addTrack(mLocalAudioTrack)
-        //mLocalPeer.addStream(stream)
+        stream.addTrack(mLocalVideoTrack)
+        stream.addTrack(mLocalAudioTrack)
+        mLocalPeer.addStream(stream)
 
 //        mLocalPeer.createOffer( object : CustomSpdObserver("localCreateOffer")
 //        {
