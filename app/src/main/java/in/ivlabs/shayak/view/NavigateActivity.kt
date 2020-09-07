@@ -1,12 +1,9 @@
 package `in`.ivlabs.shayak.view
 
-//import org.webrtc.VideoRenderer;
-
-//import org.webrtc.VideoRenderer;
-//import org.webrtc.VideoRenderer;
-
 import `in`.ivlabs.shayak.navigateactivity.NavigateActivityPresenter
 import `in`.ivlabs.shayak.navigateactivity.NavigateActivityViewInterface
+import android.content.Context
+import android.media.AudioManager
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -22,11 +19,7 @@ import org.webrtc.CameraVideoCapturer.CameraEventsHandler
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.io.PrintWriter
-import java.lang.StringBuilder
 import java.net.Socket
-import java.nio.ByteBuffer
-import java.nio.charset.Charset
-
 
 class NavigateActivity : AppCompatActivity(), NavigateActivityViewInterface,
     SeekBar.OnSeekBarChangeListener  {
@@ -168,6 +161,10 @@ class NavigateActivity : AppCompatActivity(), NavigateActivityViewInterface,
                 override fun onAddStream(mediaStream: MediaStream?) {
                     super.onAddStream(mediaStream)
                     mRemoteAudioTrack = mediaStream?.audioTracks?.get(0)!!
+                    val audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
+                    audioManager.isSpeakerphoneOn = true
+                    audioManager.mode = AudioManager.MODE_IN_COMMUNICATION
+
                     val mRemoteVideoTrack = mediaStream?.videoTracks?.get(0)
                     mRemoteVideoTrack?.setEnabled(true)
                     mRemoteVideoTrack?.addSink(mRemoteVideoView)

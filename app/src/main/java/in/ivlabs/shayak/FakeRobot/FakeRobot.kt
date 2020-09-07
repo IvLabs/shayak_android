@@ -47,8 +47,8 @@ class FakeRobot : HealthMonitorInterface,
 
     override fun getRobots(): List<RobotDatabaseInterface.RobotData> {
         return listOf<RobotDatabaseInterface.RobotData>(
-            RobotDatabaseInterface.RobotData("0x2342", "Jenna", "First floor back room", true),
-            RobotDatabaseInterface.RobotData("0x33423", "Aletta", "Second floor OPT", false))
+            RobotDatabaseInterface.RobotData("0x2342", "Robot 1", "First floor back room", true),
+            RobotDatabaseInterface.RobotData("0x33423", "Robot 2", "Second floor OPT", false))
     }
 
     override fun setRobotAsFavorite(UUID: String) {

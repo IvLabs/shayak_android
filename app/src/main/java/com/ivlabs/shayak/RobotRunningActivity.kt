@@ -4,6 +4,7 @@ import `in`.ivlabs.shayak.view.CustomCameraEventsHandler
 import `in`.ivlabs.shayak.view.CustomPeerConnectionObserver
 import `in`.ivlabs.shayak.view.CustomSpdObserver
 import android.content.Context
+import android.media.AudioManager
 import android.net.wifi.WifiManager
 import android.os.Bundle
 import android.util.Log
@@ -80,6 +81,7 @@ class RobotRunningActivity : AppCompatActivity() {
         } catch (e : WriterException) {
             e.printStackTrace();
         }
+
 
         mThread1 = ServerConnectionThread() as Thread
         mThread1.start()
@@ -169,6 +171,9 @@ class RobotRunningActivity : AppCompatActivity() {
                     mRemoteVideoTrack = mediaStream?.videoTracks?.get(0)!!
                     mRemoteVideoTrack?.setEnabled(true)
                     mRemoteVideoTrack?.addSink(mRemoteVideoView)
+                    val audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
+                    audioManager.isSpeakerphoneOn = true
+                    audioManager.mode = AudioManager.MODE_IN_COMMUNICATION
                     runOnUiThread {
                         mQRCodeImageView.visibility = View.INVISIBLE
                         mLocalVideoView.visibility = View.VISIBLE
