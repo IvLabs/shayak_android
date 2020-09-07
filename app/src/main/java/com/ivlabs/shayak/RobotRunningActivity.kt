@@ -8,7 +8,13 @@ import android.net.wifi.WifiManager
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
+import com.google.zxing.BarcodeFormat
+import com.google.zxing.MultiFormatWriter
+import com.google.zxing.WriterException
+import com.google.zxing.common.BitMatrix
+import com.journeyapps.barcodescanner.BarcodeEncoder
 import org.webrtc.*
 import java.io.BufferedReader
 import java.io.IOException
@@ -19,10 +25,12 @@ import java.net.ServerSocket
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 
+
 class RobotRunningActivity : AppCompatActivity() {
 
     private lateinit var mLocalVideoView: SurfaceViewRenderer
     private lateinit var mRemoteVideoView: SurfaceViewRenderer
+    private lateinit var mQRCodeImageView : ImageView
     private lateinit var mPeerConnectionFactory : PeerConnectionFactory
     private lateinit var mLocalPeer : PeerConnection
     private lateinit var mRemotePeer : PeerConnection
@@ -50,6 +58,9 @@ class RobotRunningActivity : AppCompatActivity() {
 
         mRemoteVideoView =
             findViewById<View>(R.id.remote_renderer) as SurfaceViewRenderer
+
+        mQRCodeImageView =
+            findViewById<ImageView>(R.id.imageView3)
 //
         mLocalVideoView.init(mRootEglBase.eglBaseContext, null)
         mRemoteVideoView.init(mRootEglBase.eglBaseContext, null)
@@ -60,6 +71,15 @@ class RobotRunningActivity : AppCompatActivity() {
         mRemoteVideoView.setEnableHardwareScaler(true)
 
         mLocalIP = getLocalIP()
+        val writer = MultiFormatWriter()
+        try {
+            val bitMatrix: BitMatrix =
+                writer.encode(mLocalIP, BarcodeFormat.QR_CODE, 200, 200)
+            val bitmap = BarcodeEncoder().createBitmap(bitMatrix)
+            mQRCodeImageView.setImageBitmap(bitmap)
+        } catch (e : WriterException) {
+            e.printStackTrace();
+        }
 
         mThread1 = ServerConnectionThread() as Thread
         mThread1.start()
@@ -113,8 +133,8 @@ class RobotRunningActivity : AppCompatActivity() {
         val audioSource = mPeerConnectionFactory.createAudioSource(audioConstraints)
         mLocalAudioTrack = mPeerConnectionFactory.createAudioTrack("101", audioSource);
 
-        mLocalVideoView.visibility = View.VISIBLE
-        mRemoteVideoView.visibility  = View.VISIBLE
+        mLocalVideoView.visibility = View.INVISIBLE
+        mRemoteVideoView.visibility  = View.INVISIBLE
 
         videoCapturer.startCapture(1080, 1584, 3)
         mLocalVideoTrack.addSink(mLocalVideoView)
@@ -149,6 +169,11 @@ class RobotRunningActivity : AppCompatActivity() {
                     mRemoteVideoTrack = mediaStream?.videoTracks?.get(0)!!
                     mRemoteVideoTrack?.setEnabled(true)
                     mRemoteVideoTrack?.addSink(mRemoteVideoView)
+                    runOnUiThread {
+                        mQRCodeImageView.visibility = View.INVISIBLE
+                        mLocalVideoView.visibility = View.VISIBLE
+                        mRemoteVideoView.visibility  = View.VISIBLE
+                    }
                 }
             })!!
 

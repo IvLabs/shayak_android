@@ -53,6 +53,10 @@ dependencies {
     implementation 'info.androidhive:barcode-reader:1.1.5'
     implementation 'com.google.android.gms:play-services-vision:11.0.2'
 
+    /* For barcode Generation*/
+    implementation 'com.google.zxing:core:3.2.1'
+    implementation 'com.journeyapps:zxing-android-embedded:3.2.0@aar'
+
     /* For Joy stick*/
     implementation 'com.jackandphantom.android:joystickview:1.0.2'
 
