@@ -56,8 +56,6 @@ class NavigateActivity : AppCompatActivity(), NavigateActivityViewInterface,
 
         val joyStickView: JoyStickView = findViewById(R.id.joyStickView)
         joyStickView.setOnMoveListener { angle, strength ->
-            val buf  = ByteBuffer.wrap("Hello".toByteArray(Charset.defaultCharset()))
-            mDataChannel.send(DataChannel.Buffer(buf, false))
             //mPresenter.updateJoystickInput(angle, strength)
         }
 
@@ -80,52 +78,14 @@ class NavigateActivity : AppCompatActivity(), NavigateActivityViewInterface,
             mPresenter.toggleTabVideo()
         }
 
-//        //Initialize PeerConnectionFactory globals.
-//        //Params are context, initAudio,initVideo and videoCodecHwAcceleration
-//        //PeerConnectionFactory.initializeAndroidGlobals(this, true, true, true);
-//        PeerConnectionFactory.initialize(
-//            PeerConnectionFactory.InitializationOptions.builder(this).createInitializationOptions()
-//        )
-//
-//        //Create a new PeerConnectionFactory instance.
-//        //PeerConnectionFactory.Options options = new PeerConnectionFactory.Options();
-//        val peerConnectionFactory =
-//            PeerConnectionFactory.builder().createPeerConnectionFactory()
-//
-//
-//        //Now create a VideoCapturer instance. Callback methods are there if you want to do something! Duh!
-//        val videoCapturerAndroid = createVideoCapturer(CustomCameraEventsHandler())
-//        //Create MediaConstraints - Will be useful for specifying video and audio constraints. More on this later!
-//        val constraints = MediaConstraints()
-//
-
         surfaceTextureHelper =
             SurfaceTextureHelper.create("CaptureThread", mRootEglBase.eglBaseContext)
-//        val videoSource =
-//            peerConnectionFactory.createVideoSource(videoCapturerAndroid!!.isScreencast)
-//        videoCapturerAndroid.initialize(
-//            surfaceTextureHelper,
-//            this,
-//            videoSource.capturerObserver
-//        )
-//        val localVideoTrack = peerConnectionFactory.createVideoTrack("100", videoSource)
-//        //create an AudioSource instance
-//
-//        //create an AudioSource instance
-//        val audioSource =
-//            peerConnectionFactory.createAudioSource(constraints)
-//        val localAudioTrack =
-//            peerConnectionFactory.createAudioTrack("101", audioSource)
-//
-//        //we will start capturing the video from the camerasignallingClient
-//        //width,height and fps
-//        //create surface renderer, init it and add the renderer to the track
         mLocalVideoView =
             findViewById<View>(R.id.local_renderer) as SurfaceViewRenderer
 
         mRemoteVideoView =
             findViewById<View>(R.id.remote_renderer) as SurfaceViewRenderer
-//
+
         mLocalVideoView.init(mRootEglBase.eglBaseContext, null)
         mRemoteVideoView.init(mRootEglBase.eglBaseContext, null)
 
@@ -133,14 +93,6 @@ class NavigateActivity : AppCompatActivity(), NavigateActivityViewInterface,
         mRemoteVideoView.setZOrderMediaOverlay(true)
         mLocalVideoView.setEnableHardwareScaler(true)
         mRemoteVideoView.setEnableHardwareScaler(true)
-//        mLocalVideoView.visibility = View.VISIBLE
-//
-//        //we will start capturing the video from the camera
-//        //width,height and fps
-//        videoCapturerAndroid.startCapture(1080, 1584, 3)
-//
-//        localVideoTrack.addSink(mLocalVideoView)
-//        mLocalVideoView.setMirror(true)
 
         startCall()
 
@@ -220,30 +172,6 @@ class NavigateActivity : AppCompatActivity(), NavigateActivityViewInterface,
                 }
             })!!
 
-
-
-        //creating remotePeer
-
-        //creating remotePeer
-//        mRemotePeer = mPeerConnectionFactory.createPeerConnection(
-//            iceServerList,
-//            object : CustomPeerConnectionObserver("RemotePeerObserver") {
-//                override fun onIceCandidate(iceCandidate: IceCandidate?) {
-//                    super.onIceCandidate(iceCandidate)
-//                    onIceCandidateReceived(mRemotePeer, iceCandidate)
-//                }
-//
-//            override fun onAddTrack(rtpReceiver: RtpReceiver?, p1: Array<out MediaStream>?) {
-//                super.onAddTrack(rtpReceiver, p1)
-//                val track = rtpReceiver?.track()
-//                    if (track is VideoTrack) {
-//                        mRemoteVideoTrack = track as VideoTrack
-//                        mRemoteVideoTrack.addSink(mRemoteVideoView)
-//                    }
-//                }
-//
-//            })!!
-
         stream = mPeerConnectionFactory.createLocalMediaStream("1222")
         stream.addTrack(mLocalVideoTrack)
         stream.addTrack(mLocalAudioTrack)
@@ -283,18 +211,6 @@ class NavigateActivity : AppCompatActivity(), NavigateActivityViewInterface,
                     }
 
                 }.start()
-//                val descLines = sessionDescription?.description?.lines().toString()
-//                val description = descLines.replace(", ","\r\n").removePrefix("[").removeSuffix("]")
-
-//                mRemotePeer.setRemoteDescription(CustomSpdObserver("remoteSetRemoteDesc"),SessionDescription(sessionDescription?.type, description) )
-//                mRemotePeer.createAnswer(object : CustomSpdObserver("remoteCreateOffer"){
-//                    override fun onCreateSuccess(sessionDescription: SessionDescription?)
-//                    {
-//                        super.onCreateSuccess(sessionDescription)
-//                        mRemotePeer.setLocalDescription(CustomSpdObserver("remoteSetLocalDesc"), sessionDescription)
-//                        mLocalPeer.setRemoteDescription(CustomSpdObserver("localSetRemoteDesc"), sessionDescription)
-//                    }
-//                }, sdpConstraints)
             }
         }, sdpConstraints)
 
@@ -315,23 +231,6 @@ class NavigateActivity : AppCompatActivity(), NavigateActivityViewInterface,
             output.flush()
         }
 
-    }
-
-    private fun gotRemoteStream(stream: MediaStream) {
-        //we have remote video stream. add to the renderer.
-        mRemoteVideoTrack = stream.videoTracks[0]
-        mRemoteVideoTrack.setEnabled(true)
-        //val audioTrack: AudioTrack = stream.audioTracks[0]
-        runOnUiThread {
-            try {
-//                remoteRenderer = VideoRenderer(remoteVideoView)
-                mRemoteVideoView.setVisibility(View.VISIBLE)
-//                videoTrack.addRenderer(remoteRenderer)
-                mRemoteVideoTrack.addSink(mRemoteVideoView)
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        }
     }
 
     override fun updateRobotAudioLevel(level: Int) {

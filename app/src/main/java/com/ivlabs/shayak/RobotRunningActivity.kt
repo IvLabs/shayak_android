@@ -150,80 +150,12 @@ class RobotRunningActivity : AppCompatActivity() {
                     mRemoteVideoTrack?.setEnabled(true)
                     mRemoteVideoTrack?.addSink(mRemoteVideoView)
                 }
-
-//                override fun onAddTrack(rtpReceiver: RtpReceiver?, p1: Array<out MediaStream>?) {
-//                    super.onAddTrack(rtpReceiver, p1)
-//                    val track = rtpReceiver?.track()
-//                    if (track is VideoTrack) {
-//                        mRemoteVideoTrack = track as VideoTrack
-//                        mRemoteVideoTrack.setEnabled(true)
-//                        mRemoteVideoTrack.addSink(mRemoteVideoView)
-//                    }
-//                }
-
-                override fun onDataChannel(p0: DataChannel?) {
-                    super.onDataChannel(p0)
-                    p0?.registerObserver(object : DataChannel.Observer{
-                        override fun onMessage(p0: DataChannel.Buffer?) {
-                            Log.d("Datachannel Observer", "onMessage")
-                        }
-
-                        override fun onBufferedAmountChange(p0: Long) {
-                            Log.d("Datachannel Observer", "onBufferedAmountChange")
-                        }
-
-                        override fun onStateChange() {
-                            Log.d("Datachannel Observer", "onStateChange")
-                        }
-
-                    })
-                }
             })!!
-
-
-
-        //creating remotePeersetLocalDescription
-
-        //creating remotePeer//                val socket = Socket(ServerIP, ServerPort)
-//                output = PrintWriter(socket.getOutputStream());
-//                input = BufferedReader(InputStreamReader(socket.getInputStream()));
-//        mRemotePeer = mPeerConnectionFactory.createPeerConnection(
-//            iceServerList,
-//            object : CustomPeerConnectionObserver("RemotePeerObserver") {
-//                override fun onIceCandidate(iceCandidate: IceCandidate?) {
-//                    super.onIceCandidate(iceCandidate)
-//                    onIceCandidateReceived(mRemotePeer, iceCandidate)
-//                }
-//
-//
-//            })!!
 
         stream = mPeerConnectionFactory.createLocalMediaStream("122")
         stream.addTrack(mLocalVideoTrack)
         stream.addTrack(mLocalAudioTrack)
         mLocalPeer.addStream(stream)
-
-//        mLocalPeer.createOffer( object : CustomSpdObserver("localCreateOffer")
-//        {
-//            override fun onCreateSuccess(sessionDescription: SessionDescription?) {
-//                super.onCreateSuccess(sessionDescription)
-//                if (sessionDescription != null) {
-//                    Log.d("SessionDescriptionToString", sessionDescription.description)
-//                }
-//                mLocalPeer.setLocalDescription(CustomSpdObserver("localSetLocalDesc"), sessionDescription)
-//                mRemotePeer.setRemoteDescription(CustomSpdObserver("remoteSetRemoteDesc"), sessionDescription)
-//                mRemotePeer.createAnswer(object : CustomSpdObserver("remoteCreateOffer"){
-//                    override fun onCreateSuccess(sessionDescription: SessionDescription?)
-//                    {
-//                        super.onCreateSuccess(sessionDescription)
-//                        mRemotePeer.setLocalDescription(CustomSpdObserver("remoteSetLocalDesc"), sessionDescription)
-//                        mLocalPeer.setRemoteDescription(CustomSpdObserver("localSetRemoteDesc"), sessionDescription)
-//                    }
-//                }, sdpConstraints)
-//            }
-//        }, sdpConstraints)
-//
-
     }
 
     fun onIceCandidateReceived(
@@ -236,23 +168,6 @@ class RobotRunningActivity : AppCompatActivity() {
             output.write(iceCandidate.sdpMid + "\r\n")
             output.write(iceCandidate.sdpMLineIndex.toString() + "\r\n")
             output.flush()
-        }
-        }
-
-    private fun gotRemoteStream(stream: MediaStream) {
-        //we have remote video stream. add to the renderer.
-        mRemoteVideoTrack = stream.videoTracks[0]
-        mRemoteVideoTrack.setEnabled(true)
-        //val audioTrack: AudioTrack = stream.audioTracks[0]
-        runOnUiThread {
-            try {
-//                remoteRenderer = VideoRenderer(remoteVideoView)
-                mRemoteVideoView.setVisibility(View.VISIBLE)
-//                videoTrack.addRenderer(remoteRenderer)
-                mRemoteVideoTrack.addSink(mRemoteVideoView)
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
         }
     }
 
