@@ -27,13 +27,14 @@
             </intent-filter>
         </activity>
         <activity android:name="in.ivlabs.shayak.view.NavigateActivity">
+        </activity>
+        <activity android:name="in.ivlabs.shayak.view.RobotConnectionActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="in.ivlabs.shayak.view.RobotConnectionActivity"></activity>
         <activity android:name="in.ivlabs.shayak.view.MainActivity"></activity>
     </application>
 

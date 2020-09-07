@@ -41,7 +41,7 @@ class NavigateActivity : AppCompatActivity(), NavigateActivityViewInterface,
     private lateinit var mRemoteAudioTrack: AudioTrack
     private lateinit var stream : MediaStream
     private lateinit var mRemoteVideoTrack : VideoTrack
-    private val ServerIP = "192.168.29.27"
+    private lateinit var ServerIP : String
     private val ServerPort = 8080
     private lateinit var output: PrintWriter
     private lateinit var input: BufferedReader
@@ -54,6 +54,8 @@ class NavigateActivity : AppCompatActivity(), NavigateActivityViewInterface,
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_navigate)
 
+        ServerIP = intent.extras?.getString("Server_IP").toString()
+
         val joyStickView: JoyStickView = findViewById(R.id.joyStickView)
         joyStickView.setOnMoveListener { angle, strength ->
             //mPresenter.updateJoystickInput(angle, strength)
@@ -62,12 +64,6 @@ class NavigateActivity : AppCompatActivity(), NavigateActivityViewInterface,
         val robotVolumeButton = findViewById<ImageButton>(R.id.robotVolumeButton)
         robotVolumeButton.setOnClickListener {
             //mPresenter.toggleRobotAudio()
-            Thread{
-                val socket = Socket(ServerIP, ServerPort)
-                output = PrintWriter(socket.getOutputStream());
-                input = BufferedReader(InputStreamReader(socket.getInputStream()));
-                call()
-            }.start()
         }
 
         val robotVolumeBar = findViewById<SeekBar>(R.id.robotVolumeSeekbar)
@@ -95,8 +91,14 @@ class NavigateActivity : AppCompatActivity(), NavigateActivityViewInterface,
         mRemoteVideoView.setEnableHardwareScaler(true)
 
         startCall()
-
         mPresenter.onViewCreated()
+        Thread{
+            val socket = Socket(ServerIP, ServerPort)
+            output = PrintWriter(socket.getOutputStream());
+            input = BufferedReader(InputStreamReader(socket.getInputStream()));
+            call()
+        }.start()
+
     }
 
     private fun startCall()

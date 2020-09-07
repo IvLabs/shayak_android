@@ -3,6 +3,8 @@ package `in`.ivlabs.shayak.robotconnectionactivity
 import `in`.ivlabs.shayak.model.robot.RobotRepository
 import `in`.ivlabs.shayak.robotconnectionactivity.RobotConnectionActivityPresenterInterface
 import `in`.ivlabs.shayak.robotconnectionactivity.RobotConnectionActivityViewInterface
+import `in`.ivlabs.shayak.view.NavigateActivity
+import android.content.Intent
 
 class RobotConnectionActivityPresenter(view : RobotConnectionActivityViewInterface)
     : RobotConnectionActivityPresenterInterface
@@ -19,7 +21,6 @@ class RobotConnectionActivityPresenter(view : RobotConnectionActivityViewInterfa
     override fun connectToRobot(UUID: String) {
         if(mRobotConnection.connect(UUID)) {
             mView?.robotConnected(UUID);
-            TODO("Launch next activity")
         }
         else
             mView?.displayRobotConnectionError();

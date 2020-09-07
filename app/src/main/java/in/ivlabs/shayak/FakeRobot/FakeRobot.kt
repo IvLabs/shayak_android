@@ -18,7 +18,7 @@ class FakeRobot : HealthMonitorInterface,
     }
 
     override fun connect(UUID: String): Boolean {
-        TODO("Not yet implemented. Connect to fake robot")
+        return true
     }
 
     override fun disconnect() {

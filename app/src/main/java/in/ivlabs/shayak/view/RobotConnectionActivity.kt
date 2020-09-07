@@ -3,6 +3,7 @@ package `in`.ivlabs.shayak.view
 import `in`.ivlabs.shayak.model.robot.RobotDatabaseInterface
 import `in`.ivlabs.shayak.robotconnectionactivity.RobotConnectionActivityPresenter
 import `in`.ivlabs.shayak.robotconnectionactivity.RobotConnectionActivityViewInterface
+import android.content.Intent
 import android.os.Bundle
 import android.util.SparseArray
 import android.view.LayoutInflater
@@ -49,7 +50,10 @@ BarcodeReader.BarcodeReaderListener
     }
 
     override fun robotConnected(UUID: String) {
-        Toast.makeText(getApplicationContext(), "Robot Connected", Toast.LENGTH_SHORT).show();
+        val intent = Intent(this, NavigateActivity::class.java).apply {
+            putExtra("Server_IP", UUID)
+        }
+        startActivity(intent)
     }
 
     override fun displayRobotConnectionError() {
@@ -71,9 +75,10 @@ BarcodeReader.BarcodeReaderListener
     }
 
     override fun onScanned(barcode: Barcode?) {
-        Toast.makeText(getApplicationContext(), "Robot Connected", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getApplicationContext(), "Robot Connected", Toast.LENGTH_SHORT).show();
         barcodeReader!!.playBeep();
-        //mPresenter.connectToRobot(barcode.toString())
+        if(barcode?.rawValue != null)
+        mPresenter.connectToRobot(barcode.rawValue)
     }
 
     override fun onScanError(errorMessage: String?) {
